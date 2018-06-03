@@ -23,7 +23,7 @@ class App extends Component{
   }
   
   render(){
-    let allEvents = ''
+    let allEvents = 'dood'
     if(this.state.events.length > 0 ) {
       allEvents = this.state.events[0]['libraryEvents']['melrose_library'][1]['info']
     }
