@@ -32,6 +32,9 @@ module.exports = {
     publicPath: "/public/",
     filename: "bundle.js"
   },
+  performance: { 
+    hints: false
+   },
   optimization: {
     minimizer: [
       // we specify a custom UglifyJsPlugin here to get source maps in production
