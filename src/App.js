@@ -1,44 +1,22 @@
-import React, { Component} from "react"
-import "./style.css"
-import db from "./db.js"
-
-class App extends Component{
-  constructor(props){
-    super(props)
-
-    this.state = {
-      events: []
-    }
-  }
-
-  componentDidMount(){
-    db.ref().on("value", (snapshot)  => {
-      const allEvents = snapshot.val()
-      this.setState({ events: [allEvents].concat(this.state.events) });
-    }, function (error) {
-      console.log("Error: " + error.code);
-    });
-  }
-  
-  render(){
-    let eventTime = ''
-    let eventDate = ''
-    let eventInfo = ''
-    if(this.state.events.length > 0 ) {
-      console.log(this.state.events[0]['libraryEvents']['melrose_library'])
-      eventInfo = this.state.events[0]['libraryEvents']['melrose_library'][2]['eventInfo']['info'][1]
-      eventDate = this.state.events[0]['libraryEvents']['melrose_library'][2]['date']
-      eventTime = this.state.events[0]['libraryEvents']['melrose_library'][2]['eventInfo']['time'][1]
-    }
-
-    return(
-      <div className="App">
-        <h1>Date: { eventDate }</h1>
-        <h1>Event: { eventInfo }</h1>
-        <h1>Time: { eventTime }</h1>
+import React, { Component } from 'react';
+import './App.css';
+import './index.css'
+import {apiKey} from '../config/keys.js'
+// import the Google Maps API Wrapper from google-maps-react
+import { GoogleApiWrapper } from 'google-maps-react' 
+// import child component
+import MapContainer from './MapContainer'
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <h1> East Oakland Playgroups </h1>
+        <MapContainer google={this.props.google} />
       </div>
     );
   }
 }
-
-export default App;
+// OTHER MOST IMPORTANT: Here we are exporting the App component WITH the GoogleApiWrapper. You pass it down with an object containing your API key
+export default GoogleApiWrapper({
+  apiKey: apiKey,
+})(App)
