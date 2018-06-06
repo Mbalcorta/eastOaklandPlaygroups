@@ -2,8 +2,6 @@ import React, { Component} from "react"
 import "./style.css"
 import db from "./db.js"
 
-
-
 class App extends Component{
   constructor(props){
     super(props)
@@ -23,14 +21,21 @@ class App extends Component{
   }
   
   render(){
-    let allEvents = 'dood'
+    let eventTime = ''
+    let eventDate = ''
+    let eventInfo = ''
     if(this.state.events.length > 0 ) {
-      allEvents = this.state.events[0]['libraryEvents']['melrose_library'][1]['info']
+      console.log(this.state.events[0]['libraryEvents']['melrose_library'])
+      eventInfo = this.state.events[0]['libraryEvents']['melrose_library'][2]['eventInfo']['info'][1]
+      eventDate = this.state.events[0]['libraryEvents']['melrose_library'][2]['date']
+      eventTime = this.state.events[0]['libraryEvents']['melrose_library'][2]['eventInfo']['time'][1]
     }
 
     return(
       <div className="App">
-        <h1>{ allEvents }</h1>
+        <h1>Date: { eventDate }</h1>
+        <h1>Event: { eventInfo }</h1>
+        <h1>Time: { eventTime }</h1>
       </div>
     );
   }
