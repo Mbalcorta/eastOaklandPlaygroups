@@ -1,7 +1,7 @@
 var firebase = require("firebase/app")
 require("firebase/database")
 
-const {apiKey} = require('../config/keys.js')
+const {apiKey} = require('../../config/keys.js')
 // Set the configuration for your app
   // TODO: Replace with your project's config object
 

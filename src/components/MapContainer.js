@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-import db from "./db.js"
+import db from "../js/db.js"
 
 
 export default class MapContainer extends Component {

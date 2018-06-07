@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import './App.css';
-import './index.css'
-import {apiKey} from '../config/keys.js'
+import React, { Component } from 'react'
+import '../styles/App.css'
+import '../styles/index.css'
+import {apiKey} from '../../config/keys.js'
+import date from '../js/getDate.js'
 // import the Google Maps API Wrapper from google-maps-react
 import { GoogleApiWrapper } from 'google-maps-react' 
 // import child component
@@ -11,6 +12,7 @@ class App extends Component {
     return (
       <div>
         <h1> East Oakland Playgroups </h1>
+        <h3>{ date }</h3>
         <MapContainer google={this.props.google} />
       </div>
     );
