@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <h1> East Oakland Playgroups </h1>
+        <h1> East Oakland Kids Activities </h1>
         <h3>{ date }</h3>
         <MapContainer google={this.props.google} />
       </div>
