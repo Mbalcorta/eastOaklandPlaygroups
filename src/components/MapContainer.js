@@ -81,7 +81,7 @@ export default class MapContainer extends Component {
           title: eventDetails.libraryName // the title of the marker is set to the name of the location
         });
       
-       var contentString = ``
+       var contentString = ''
        eventDetails.events.forEach(eachEvent => {
          eachEvent.eventInfo.forEach(eachEventInfo => {  
            const eventName = eachEventInfo.eventName
@@ -89,10 +89,10 @@ export default class MapContainer extends Component {
            const time = eachEventInfo.time
        
            contentString = 
-           `<div id="content">`+
+           '<div id="content">'+
            `<a id="firstHeading" href= ${url} class="firstHeading" target="_blank">Event: ${eventName}</a>`+
            `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
-           `</div>`;
+           '</div>';
          })
        })
 
@@ -101,11 +101,10 @@ export default class MapContainer extends Component {
           maxWidth: 200
         });
 
+        //when pin point clicked will close pop up button
         marker.addListener('click', function() {
           infowindow.open(this.map, marker);
         });
-
-        console.log(marker)
 
       })
 
