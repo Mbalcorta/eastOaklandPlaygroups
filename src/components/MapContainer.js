@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import db from "../js/db.js"
+import date from '../js/getDate.js'
 
 
 export default class MapContainer extends Component {
@@ -21,17 +22,28 @@ export default class MapContainer extends Component {
     
     db.ref().on("value", (snapshot)  => {
       const allEvents = snapshot.val()
-      
+      //filter to only get events of today
+     let eventsOfTheDay = []
+     for( const libraryName in allEvents['libraryEvents']){
+      const eachLibraryEvents = allEvents['libraryEvents'][libraryName]['allEvents']
+
+      const events = eachLibraryEvents.filter(eachElement => {
+        return eachElement['date'] === date
+        })
+      //replace libraryName underscores with spaces for map pin labels.
+      if(events.length > 0 ){
+        const eventLocation = allEvents['libraryEvents'][libraryName]['location']
+        eventsOfTheDay.push({
+          libraryName: libraryName,
+          events: events,
+          location: eventLocation
+        })
+      }
+        
+     }
       this.setState({
-        events: [allEvents].concat(this.state.events)
-        // locations: [{
-        //               'name': 'melrose library', 
-        //               'location': {
-        //                 'lat': melroseLocation.lat,
-        //                 'lng': melroseLocation.lng
-        //                 }
-        //               }].concat(this.state.locations)
-       }, () => console.log(this.state.events));
+        events: eventsOfTheDay.concat(this.state.events)
+       }, () => this.loadMap());
     }, function (error) {
       console.log("Error: " + error.code);
     });
@@ -61,39 +73,41 @@ export default class MapContainer extends Component {
   // ==================
   // ADD MARKERS TO MAP
   // ==================
-      // this.state.locations.forEach( location => { // iterate through locations saved in state
-      //   const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
-      //     position: {lat: location.location.lat, lng: location.location.lng}, // sets position of marker to specified location
-      //     map: this.map, // sets markers to appear on the map we just created on line 35
-      //     title: location.name // the title of the marker is set to the name of the location
-      //   });
-      //   // const time = this.state.events.
-      //   let time = ''
-      //   let event = ''
-
-      //   if(this.state.events){
-      //     console.log(this.state.events)
-      //     time = this.state.events[0].eventInfo[0].time
-      //     event = this.state.events[0].eventInfo[0].eventName
-      //   }
+      this.state.events.forEach( eventDetails => { // iterate through locations saved in state
+        
+        const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
+          position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
+          map: this.map, // sets markers to appear on the map we just created on line 35
+          title: eventDetails.libraryName // the title of the marker is set to the name of the location
+        });
+      
+       var contentString = ``
+       eventDetails.events.forEach(eachEvent => {
+         eachEvent.eventInfo.forEach(eachEventInfo => {  
+           const eventName = eachEventInfo.eventName
+           const url = eachEventInfo.url
+           const time = eachEventInfo.time
        
+           contentString = 
+           `<div id="content">`+
+           `<a id="firstHeading" href= ${url} class="firstHeading" target="_blank">Event: ${eventName}</a>`+
+           `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
+           `</div>`;
+         })
+       })
 
-      //   var contentString = 
-      //   '<div id="content">'+
-      //   `<a id="firstHeading" class="firstHeading">Event: ${event}</a>`+
-      //   `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
-      //   '</div>';
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString,
+          maxWidth: 200
+        });
 
-      //   var infowindow = new google.maps.InfoWindow({
-      //     content: contentString,
-      //     maxWidth: 200
-      //   });
+        marker.addListener('click', function() {
+          infowindow.open(this.map, marker);
+        });
 
-      //   marker.addListener('click', function() {
-      //     infowindow.open(this.map, marker);
-      //   });
+        console.log(marker)
 
-      // })
+      })
 
     }
     
