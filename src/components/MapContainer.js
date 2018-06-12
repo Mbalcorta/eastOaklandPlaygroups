@@ -25,6 +25,7 @@ export default class MapContainer extends Component {
       //filter to only get events of today
      let eventsOfTheDay = []
      for( const libraryName in allEvents['libraryEvents']){
+      
       const eachLibraryEvents = allEvents['libraryEvents'][libraryName]['allEvents']
 
       const events = eachLibraryEvents.filter(eachElement => {
@@ -32,9 +33,15 @@ export default class MapContainer extends Component {
         })
       //replace libraryName underscores with spaces for map pin labels.
       if(events.length > 0 ){
+        let formatLibraryName = ''
+        if(libraryName === 'Avenue81_Library'){
+          formatLibraryName = '81st Avenue Branch'
+        } else {
+          formatLibraryName = libraryName.replace(/_/g, " ");
+        }
         const eventLocation = allEvents['libraryEvents'][libraryName]['location']
         eventsOfTheDay.push({
-          libraryName: libraryName,
+          libraryName: formatLibraryName,
           events: events,
           location: eventLocation
         })
@@ -83,15 +90,20 @@ export default class MapContainer extends Component {
       
        var contentString = ''
        eventDetails.events.forEach(eachEvent => {
+        const location = eventDetails['libraryName']
+        contentString += 
+        '<div id="content">'+
+        `<p id="firstHeading" class="firstHeading">Location: ${location}</p>`
          eachEvent.eventInfo.forEach(eachEventInfo => {  
+          
            const eventName = eachEventInfo.eventName
            const url = eachEventInfo.url
            const time = eachEventInfo.time
+           
        
-           contentString = 
-           '<div id="content">'+
-           `<a id="firstHeading" href= ${url} class="firstHeading" target="_blank">Event: ${eventName}</a>`+
+           contentString += 
            `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
+           `<label>Event: </label><a id="firstHeading" href= ${url} class="firstHeading" target="_blank">${eventName}</a>`+
            '</div>';
          })
        })
