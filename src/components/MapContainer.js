@@ -22,32 +22,37 @@ export default class MapContainer extends Component {
     
     db.ref().on("value", (snapshot)  => {
       const allEvents = snapshot.val()
+
       //filter to only get events of today
      let eventsOfTheDay = []
-     for( const libraryName in allEvents['libraryEvents']){
+     for( const events in allEvents){
       
-      const eachLibraryEvents = allEvents['libraryEvents'][libraryName]['allEvents']
+      for(const eventDetails in allEvents[events]){
 
-      const events = eachLibraryEvents.filter(eachElement => {
+        const eachEventArray = allEvents[events][eventDetails]['allEvents']
+
+        const filteredByDate = eachEventArray.filter(eachElement => {
         return eachElement['date'] === date
         })
-      //replace libraryName underscores with spaces for map pin labels.
-      if(events.length > 0 ){
-        let formatLibraryName = ''
-        if(libraryName === 'Avenue81_Library'){
-          formatLibraryName = '81st Avenue Branch'
-        } else {
-          formatLibraryName = libraryName.replace(/_/g, " ");
-        }
-        const eventLocation = allEvents['libraryEvents'][libraryName]['location']
-        eventsOfTheDay.push({
-          libraryName: formatLibraryName,
-          events: events,
-          location: eventLocation
-        })
+   //replace libraryName underscores with spaces for map pin labels.
+        if(filteredByDate.length > 0 ){
+          let formatName = ''
+          if(eventDetails === 'Avenue81_Library'){
+            formatName = '81st Avenue Branch'
+          } else {
+            formatName = eventDetails.replace(/_/g, " ");
+          }
+
+          const eventLocation = allEvents[events][eventDetails]['location']
+          
+          eventsOfTheDay.push({
+            eventName: formatName,
+            events: filteredByDate,
+            location: eventLocation
+          })
+        }  
       }
-        
-     }
+    }
       this.setState({
         events: eventsOfTheDay.concat(this.state.events)
        }, () => this.loadMap());
@@ -90,7 +95,7 @@ export default class MapContainer extends Component {
       
        var contentString = ''
        eventDetails.events.forEach(eachEvent => {
-        const location = eventDetails['libraryName']
+        const location = eventDetails['eventName']
         contentString += 
         '<div id="content">'+
         `<p id="firstHeading" class="firstHeading">Location: ${location}</p>`
