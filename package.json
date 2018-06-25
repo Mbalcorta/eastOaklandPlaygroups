@@ -26,9 +26,10 @@
   },
   "dependencies": {
     "firebase": "^5.0.4",
+    "google-maps-react": "^2.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "uglifyjs-webpack-plugin": "^1.2.5",
-    "google-maps-react": "^2.0.2"
+    "react-responsive-decorator": "0.0.1",
+    "uglifyjs-webpack-plugin": "^1.2.5"
   }
 }
