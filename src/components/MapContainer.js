@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import db from "../js/db.js"
 import date from '../js/getDate.js'
+import Responsive from 'react-responsive-decorator'
 
-
-export default class MapContainer extends Component {
+class MapContainer extends Component {
   constructor(props){
     super(props)
 
     this.state = {
-        events: []
+        events: [],
+        isMobile: false
     }
   }
 
@@ -19,6 +20,16 @@ export default class MapContainer extends Component {
  
 
   componentDidMount() {
+    // this.props.media({ minWidth: 768 }, () => {
+    //   this.setState({
+    //     isMobile: false
+    //   })
+    // })
+    this.props.media({ maxWidth: 768 }, () => {
+      this.setState({
+        isMobile: true
+      })
+    })
     
     db.ref().on("value", (snapshot)  => {
       const allEvents = snapshot.val()
@@ -68,10 +79,10 @@ export default class MapContainer extends Component {
 
       const mapRef = this.refs.map; // looks for HTML div ref 'map'. Returned in render below.
       const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
-
+      
       const mapConfig = Object.assign({}, {
         center: {lat: 37.7763887, lng: -122.2098494}, // sets center of google map to NYC.
-        zoom: 13, // sets zoom. Lower numbers are zoomed further out.
+        zoom: this.state.mobile ? 13 : 12, // sets zoom. Lower numbers are zoomed further out.
         mapTypeId: 'roadmap' // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
       })
 
@@ -85,8 +96,8 @@ export default class MapContainer extends Component {
   // ==================
   // ADD MARKERS TO MAP
   // ==================
+      
       this.state.events.forEach( eventDetails => { // iterate through locations saved in state
-        
         const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
           position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
           map: this.map, // sets markers to appear on the map we just created on line 35
@@ -105,7 +116,6 @@ export default class MapContainer extends Component {
            const url = eachEventInfo.url
            const time = eachEventInfo.time
            
-       
            contentString += 
            `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
            `<label>Event: </label><a id="firstHeading" href= ${url} class="firstHeading" target="_blank">${eventName}</a>`+
@@ -142,3 +152,5 @@ export default class MapContainer extends Component {
     )
   }
 }
+
+export default Responsive(MapContainer)
