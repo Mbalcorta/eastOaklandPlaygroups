@@ -15,7 +15,7 @@ if(currentDate === 1 || currentDate === 31){
 } else if(currentDate === 3){
     dayPrefix = 'rd, '
 }
-const date = day+', '+monthList[currentMonth]+' '+currentDate+dayPrefix+currentYear
+// const date = day+', '+monthList[currentMonth]+' '+currentDate+dayPrefix+currentYear
 // const date = 'Thursday'+', '+'May'+' '+24+dayPrefix+currentYear
-// const date = 'Wednesday'+', '+monthList[currentMonth]+' '+27+dayPrefix+currentYear
+const date = 'Wednesday'+', '+monthList[currentMonth]+' '+27+dayPrefix+currentYear
 export default date
