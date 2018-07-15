@@ -10,7 +10,7 @@ import MapContainer from './MapContainer'
 class App extends Component {
   render() {
     return (
-      <div>
+      <div className="header">
         <h1> East Oakland Kids Activities </h1>
         <h3>{ date }</h3>
         <MapContainer google={this.props.google} />
