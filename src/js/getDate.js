@@ -8,14 +8,14 @@ const formattedCurrentMonth = ("0" + (currentMonth + 1)).slice(-2)
 const currentYear = today.getFullYear()
 const monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 let dayPrefix = 'th, '
-if(currentDate === 1 || currentDate === 31){
+if(currentDate === 1 || currentDate === 21 || currentDate === 31){
     dayPrefix = 'st, '
-} else if(currentDate === 2){
+} else if(currentDate === 2 || currentDate === 22){
     dayPrefix = 'nd, '
-} else if(currentDate === 3){
+} else if(currentDate === 3 || currentDate === 23){
     dayPrefix = 'rd, '
 }
-// const date = day+', '+monthList[currentMonth]+' '+currentDate+dayPrefix+currentYear
+const date = day+', '+monthList[currentMonth]+' '+currentDate+dayPrefix+currentYear
 // const date = 'Thursday'+', '+'May'+' '+24+dayPrefix+currentYear
-const date = 'Wednesday'+', '+monthList[currentMonth]+' '+27+dayPrefix+currentYear
+// const date = 'Monday'+', '+monthList[currentMonth]+' '+16+dayPrefix+currentYear
 export default date
