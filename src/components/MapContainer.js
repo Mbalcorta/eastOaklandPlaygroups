@@ -10,8 +10,11 @@ class MapContainer extends Component {
 
     this.state = {
         events: [],
-        isMobile: false
+        isMobile: false,
+        markers: ['one']
     }
+
+    // this.setMarkers = this.setMarkers.bind(this)
   }
 
   // ======================
@@ -33,7 +36,6 @@ class MapContainer extends Component {
     
     db.ref().on("value", (snapshot)  => {
       const allEvents = snapshot.val()
-
       //filter to only get events of today
      let eventsOfTheDay = []
      for( const events in allEvents){
@@ -41,8 +43,8 @@ class MapContainer extends Component {
       for(const eventDetails in allEvents[events]){
 
         const eachEventArray = allEvents[events][eventDetails]['allEvents']
-
         const filteredByDate = eachEventArray.filter(eachElement => {
+          console.log(eachElement['date'] === date, eachElement['date'], date)
         return eachElement['date'] === date
         })
    //replace libraryName underscores with spaces for map pin labels.
@@ -96,7 +98,6 @@ class MapContainer extends Component {
   // ==================
   // ADD MARKERS TO MAP
   // ==================
-      
       this.state.events.forEach( eventDetails => { // iterate through locations saved in state
         const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
           position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
@@ -132,12 +133,9 @@ class MapContainer extends Component {
         marker.addListener('click', function() {
           infowindow.open(this.map, marker);
         });
-
       })
-
-    }
-    
-  }
+    } 
+}
 
   render() {
     const style = { // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
