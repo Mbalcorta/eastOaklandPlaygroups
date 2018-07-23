@@ -10,8 +10,11 @@ class MapContainer extends Component {
 
     this.state = {
         events: [],
-        isMobile: false
+        isMobile: false,
+        markers: ['one']
     }
+
+    // this.setMarkers = this.setMarkers.bind(this)
   }
 
   // ======================
@@ -33,7 +36,6 @@ class MapContainer extends Component {
     
     db.ref().on("value", (snapshot)  => {
       const allEvents = snapshot.val()
-
       //filter to only get events of today
      let eventsOfTheDay = []
      for( const events in allEvents){
@@ -41,8 +43,8 @@ class MapContainer extends Component {
       for(const eventDetails in allEvents[events]){
 
         const eachEventArray = allEvents[events][eventDetails]['allEvents']
-
         const filteredByDate = eachEventArray.filter(eachElement => {
+          console.log(eachElement['date'] === date, eachElement['date'], date)
         return eachElement['date'] === date
         })
    //replace libraryName underscores with spaces for map pin labels.
@@ -87,14 +89,17 @@ class MapContainer extends Component {
       })
 
       this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
+
+      //this needs to add markers to map -> need to first filter object to show events of that day
+      //once this is set in the state then create a marker for these events
+      //separate out add markers code //make this be a function that will loop through libraryEvent object
+      //make it work for once single post // have looping happening
       
   // ==================
   // ADD MARKERS TO MAP
   // ==================
-      let marker = null;
-      
       this.state.events.forEach( eventDetails => { // iterate through locations saved in state
-        marker = new google.maps.Marker({ // creates a new Google maps Marker object.
+        const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
           position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
           map: this.map, // sets markers to appear on the map we just created on line 35
           title: eventDetails.libraryName // the title of the marker is set to the name of the location
@@ -123,15 +128,14 @@ class MapContainer extends Component {
           content: contentString,
           maxWidth: 200
         });
-      })
 
-      // maps.event.addListener(marker, 'click', function() {
-      // infowindow.setContent('Hello World');
-      // infowindow.open(map, this);
-      // });
-    }
-    
-  }
+        //when pin point clicked will close pop up button
+        marker.addListener('click', function() {
+          infowindow.open(this.map, marker);
+        });
+      })
+    } 
+}
 
   render() {
     const style = { // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
