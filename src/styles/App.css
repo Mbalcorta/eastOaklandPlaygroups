@@ -1,5 +1,6 @@
 body {
   font-family: 'Love Ya Like A Sister', cursive;
+  padding: 3%;
 }
 
 .header {
@@ -40,6 +41,10 @@ body {
   to { transform: rotate(360deg); }
 }
 
-body {
-  padding: 3%;
+.gm-style-iw a {
+  color: black;
+}
+.gm-style-iw {
+  font-size: 15px;
+  font-family: 'Love Ya Like A Sister', cursive;
 }
