@@ -44,7 +44,6 @@ class MapContainer extends Component {
 
         const eachEventArray = allEvents[events][eventDetails]['allEvents']
         const filteredByDate = eachEventArray.filter(eachElement => {
-          console.log(eachElement['date'] === date, eachElement['date'], date)
         return eachElement['date'] === date
         })
    //replace libraryName underscores with spaces for map pin labels.
