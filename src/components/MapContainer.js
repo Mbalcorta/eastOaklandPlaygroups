@@ -11,10 +11,10 @@ class MapContainer extends Component {
     this.state = {
         events: [],
         isMobile: false,
-        markers: ['one']
+        markers: []
     }
 
-    // this.setMarkers = this.setMarkers.bind(this)
+    this.addMarkers =  this.addMarkers.bind(this)
   }
 
   // ======================
@@ -73,6 +73,12 @@ class MapContainer extends Component {
     });
   }
 
+  addMarkers(markersArray){
+    this.setState({
+      markers: this.state.markers.concat(markersArray)
+    }, () => {console.log(this.state.markers)})
+  }
+  
   loadMap() {
     if (this.props && this.props.google) { // checks to make sure that props have been passed
       const {google} = this.props; // sets props equal to google
@@ -82,33 +88,31 @@ class MapContainer extends Component {
       const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
       
       const mapConfig = Object.assign({}, {
-        center: {lat: 37.7763887, lng: -122.2098494}, // sets center of google map to NYC.
+        center: {lat: 37.7763887, lng: -122.2098494}, // sets center of google map to Oakland.
         zoom: this.state.isMobile ? 11 : 13, // sets zoom. Lower numbers are zoomed further out.
         mapTypeId: 'roadmap' // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
       })
 
       this.map = new maps.Map(node, mapConfig); // creates a new Google map on the specified node (ref='map') with the specified configuration set above.
-
+     
       //this needs to add markers to map -> need to first filter object to show events of that day
       //once this is set in the state then create a marker for these events
       //separate out add markers code //make this be a function that will loop through libraryEvent object
       //make it work for once single post // have looping happening
-      
+  
   // ==================
   // ADD MARKERS TO MAP
   // ==================
-      this.state.events.forEach( eventDetails => { // iterate through locations saved in state
-        const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
-          position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
-          map: this.map, // sets markers to appear on the map we just created on line 35
-          title: eventDetails.libraryName // the title of the marker is set to the name of the location
-        });
-      
-       var contentString = ''
+      var markers = []
+      this.state.events.forEach( eventDetails => {
+        var contentString = ''
+        let keyLocation = null; 
        eventDetails.events.forEach(eachEvent => {
         const location = eventDetails['eventName']
+        keyLocation = location.split(' ')[0]
+
         contentString += 
-        '<div id="content">'+
+        `<div id="content" key=${keyLocation}>`+
         `<p id="firstHeading" class="firstHeading">Location: ${location}</p>`
          eachEvent.eventInfo.forEach(eachEventInfo => {  
           
@@ -122,18 +126,33 @@ class MapContainer extends Component {
            '</div>';
          })
        })
-
-        var infowindow = new google.maps.InfoWindow({
+        //when pin point clicked will close pop up button
+        var locationInfowindow = new google.maps.InfoWindow({
           content: contentString,
           maxWidth: 200
         });
+        // iterate through locations saved in state
+        const marker = new google.maps.Marker({ // creates a new Google maps Marker object.
+          position: {lat: eventDetails.location.lat, lng: eventDetails.location.lng}, // sets position of marker to specified location
+          map: this.map, // sets markers to appear on the map we just created on line 35
+          title: eventDetails.libraryName, // the title of the marker is set to the name of the location
+          infowindow: locationInfowindow
+        });
 
-        //when pin point clicked will close pop up button
-        marker.addListener('click', function() {
-          infowindow.open(this.map, marker);
+        markers.push(marker)
+
+        google.maps.event.addListener(marker, 'click', function() {
+          hideAllInfoWindows(this.map);
+          this.infowindow.open(this.map, this);
         });
       })
+      this.addMarkers(markers)
+      const hideAllInfoWindows = (map) => {
+        this.state.markers.forEach(function(marker) {
+          marker.infowindow.close(map, marker);
+       }); 
     } 
+  }
 }
 
   render() {
