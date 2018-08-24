@@ -34,19 +34,59 @@ class MapContainer extends Component {
       })
     })
     
-    db.ref().on("value", (snapshot)  => {
-      const allEvents = snapshot.val()
-      //filter to only get events of today
-     let eventsOfTheDay = []
-     for( const events in allEvents){
+  //   db.ref().on("value", (snapshot)  => {
+  //     const allEvents = snapshot.val()
+  //     //filter to only get events of today
+  //    let eventsOfTheDay = []
+  //    for( const events in allEvents){
       
-      for(const eventDetails in allEvents[events]){
+  //     for(const eventDetails in allEvents[events]){
 
+  //       const eachEventArray = allEvents[events][eventDetails]['allEvents']
+  //       const filteredByDate = eachEventArray.filter(eachElement => {
+  //       return eachElement['date'] === date
+  //       })
+  //  //replace libraryName underscores with spaces for map pin labels.
+  //       if(filteredByDate.length > 0 ){
+  //         let formatName = ''
+  //         if(eventDetails === 'Avenue81_Library'){
+  //           formatName = '81st Avenue Branch'
+  //         } else {
+  //           formatName = eventDetails.replace(/_/g, " ");
+  //         }
+
+  //         const eventLocation = allEvents[events][eventDetails]['location']
+          
+  //         eventsOfTheDay.push({
+  //           eventName: formatName,
+  //           events: filteredByDate,
+  //           location: eventLocation
+  //         })
+  //       }  
+  //     }
+  //   }
+   
+    // this.setState({
+    //   events: eventsOfTheDay.concat(this.state.events)
+    //   }, () => {
+    //     console.log('in here')
+    //     this.loadMap()});
+    // }, function (error) {
+  //     console.log("####Error: " + error.code);
+  //   })
+
+  db.ref().on("value", (snapshot)  => {
+    const allEvents = snapshot.val()
+    //filter to only get events of today
+    let eventsOfTheDay = []
+    for( const events in allEvents){
+      for(const eventDetails in allEvents[events]){
         const eachEventArray = allEvents[events][eventDetails]['allEvents']
-        const filteredByDate = eachEventArray.filter(eachElement => {
-        return eachElement['date'] === date
+        if(eachEventArray !== undefined){
+          const filteredByDate = eachEventArray.filter(eachElement => {
+          return eachElement['date'] === date
         })
-   //replace libraryName underscores with spaces for map pin labels.
+//  replace libraryName underscores with spaces for map pin labels.
         if(filteredByDate.length > 0 ){
           let formatName = ''
           if(eventDetails === 'Avenue81_Library'){
@@ -65,13 +105,14 @@ class MapContainer extends Component {
         }  
       }
     }
-      this.setState({
-        events: eventsOfTheDay.concat(this.state.events)
-       }, () => this.loadMap());
-    }, function (error) {
-      console.log("Error: " + error.code);
-    });
   }
+  this.setState({
+    events: eventsOfTheDay.concat(this.state.events)
+    }, () => this.loadMap());
+    }, function (error) {
+    console.log("Error: " + error.code);
+  })
+}
 
   addMarkers(markersArray){
     this.setState({
