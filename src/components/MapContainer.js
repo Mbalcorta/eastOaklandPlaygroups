@@ -89,7 +89,7 @@ class MapContainer extends Component {
       
       const mapConfig = Object.assign({}, {
         center: {lat: 37.767843, lng: -122.185825}, // sets center of google map to Oakland.
-        zoom: this.state.isMobile ? 11 : 13, // sets zoom. Lower numbers are zoomed further out.
+        zoom: this.state.isMobile ? 12 : 13, // sets zoom. Lower numbers are zoomed further out.
         mapTypeId: 'roadmap' // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
       })
 
