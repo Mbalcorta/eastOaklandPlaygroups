@@ -88,7 +88,7 @@ class MapContainer extends Component {
       const node = ReactDOM.findDOMNode(mapRef); // finds the 'map' div in the React DOM, names it node
       
       const mapConfig = Object.assign({}, {
-        center: {lat: 37.7763887, lng: -122.2098494}, // sets center of google map to Oakland.
+        center: {lat: 37.767843, lng: -122.185825}, // sets center of google map to Oakland.
         zoom: this.state.isMobile ? 11 : 13, // sets zoom. Lower numbers are zoomed further out.
         mapTypeId: 'roadmap' // optional main map layer. Terrain, satellite, hybrid or roadmap--if unspecified, defaults to roadmap.
       })
