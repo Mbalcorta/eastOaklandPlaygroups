@@ -23,6 +23,7 @@ p {
   display: flex;
   flex-direction: row-reverse;
   background-color: #2BBCAE;
+  padding-bottom: 10px;
 }
 
 .mapContainer {
