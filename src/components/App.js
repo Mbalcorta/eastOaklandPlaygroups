@@ -8,7 +8,6 @@ import { GoogleApiWrapper } from 'google-maps-react'
 // import child component
 import MapContainer from './MapContainer'
 import Header from './Header';
-import About from './About';
 import Resources from './Resources';
 import AboutMe from './AboutMe';
 
@@ -17,7 +16,6 @@ class App extends Component {
     return (
       <div className="container">
         <Header/>
-        <About />
         <MapContainer google={this.props.google} />
         <Resources />
         <AboutMe />
