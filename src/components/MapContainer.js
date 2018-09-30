@@ -164,7 +164,6 @@ class MapContainer extends Component {
 
     return ( // in our return function you must return a div with ref='map' and style.
       <div className="mapContainer">
-       
        <h2>   {date} Activities</h2>
         <div ref="map" style={style}>
           loading map...
