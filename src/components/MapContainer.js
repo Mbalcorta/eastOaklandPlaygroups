@@ -38,7 +38,7 @@ class MapContainer extends Component {
   db.ref().on("value", (snapshot)  => {
     const allEvents = snapshot.val()
     //filter to only get events of today
-    let eventsOfTheDay = []
+    const eventsOfTheDay = []
     for( const events in allEvents){
       for(const eventDetails in allEvents[events]){
         const eachEventArray = allEvents[events][eventDetails]['allEvents']
@@ -66,10 +66,12 @@ class MapContainer extends Component {
       }
     }
   }
-  this.setState({
-    events: eventsOfTheDay.concat(this.state.events)
-    }, () => this.loadMap());
-    }, function (error) {
+  if(eventsOfTheDay.length){
+    this.setState({
+      events: eventsOfTheDay.concat(this.state.events)
+      }, () => this.loadMap());
+  }
+  }, function (error) {
     console.log("Error: " + error.code);
   })
 }
@@ -122,8 +124,8 @@ class MapContainer extends Component {
            const time = eachEventInfo.time
            
            contentString += 
-           `<p id="firstHeading" class="firstHeading">Time: ${time}</p>`+
-           `<label>Event: </label><a id="firstHeading" href= ${url} class="firstHeading" target="_blank">${eventName}</a>`+
+           `<p class="firstHeading">Time: ${time}</p>`+
+           `<label>Event: </label><a href= ${url} class="firstHeading" target="_blank">${eventName}</a>`+
            '</div>';
          })
        })
@@ -157,17 +159,30 @@ class MapContainer extends Component {
 }
 
   render() {
-    const style = { // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
+    let activitesText;
+    let style = { // MUST specify dimensions of the Google map or it will not work. Also works best when style is specified inside the render function and created as an object
       width: '98vw', // 90vw basically means take up 90% of the width screen. px also works.
       height: '75vh' // 75vh similarly will take up roughly 75% of the height of the screen. px also works.
     }
 
+    if (this.state.events.length){
+      activitesText = "loading map..."
+    } else {
+      style = {width: '100vw', height: '10vh'}
+      activitesText = (
+        "no activites today check back tomorrow"
+      )
+    }
+   
+
+   
+
     return ( // in our return function you must return a div with ref='map' and style.
       <div className="mapContainer">
-       <h2>   {date} Activities</h2>
-        <div ref="map" style={style}>
-          loading map...
-        </div>
+       <h2>{date} Activities</h2>
+       <div ref="map" style={style}>
+        {activitesText}
+       </div>
       </div>
     )
   }
